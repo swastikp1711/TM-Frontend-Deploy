@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import emailjs from 'emailjs-com';
+import { useNavigate } from 'react-router-dom';
+
 
 const InvoiceRegistrationPage = () => {
   const [documentType, setDocumentType] = useState('invoices');
@@ -8,50 +9,30 @@ const InvoiceRegistrationPage = () => {
   const [invoiceDate, setInvoiceDate] = useState('');
   const [suppliersInvoiceNumber, setSuppliersInvoiceNumber] = useState('');
   const [invoiceGrossValue, setInvoiceGrossValue] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Navigate to home page with a success message
+    const grossValue = parseFloat(invoiceGrossValue);
 
-    const templateParams = {
-      documentType,
-      invoiceTemplate,
-      relatedPurchaseOrder,
-      invoiceDate,
-      suppliersInvoiceNumber,
-      invoiceGrossValue,
-      to_name: 'John', // Replace with the recipient's name
-      from_name: 'Lavis', // Replace with your name or the sender's name
-      message: 'Here are the details of the invoice registration:', // Customize your message
-    };
-
-    emailjs.send('service_rui62hu', 'template_mcdlfe8', templateParams, {
-        publicKey: 'D1Dk7f3uH8EyZ28Fv',
-      })
-      .then((response) => {
-        console.log('SUCCESS!', response.status, response.text);
-        alert('Email sent successfully!');
-      }, (err) => {
-        console.log('FAILED...', err);
-        alert('Failed to send email.');
-      });
-
-    // Optionally, reset the form after submission
-    setDocumentType('invoices');
-    setInvoiceTemplate('PINV-Purchase invoices');
-    setRelatedPurchaseOrder('');
-    setInvoiceDate('');
-    setSuppliersInvoiceNumber('');
-    setInvoiceGrossValue('');
+    // Check if the invoice gross value is greater than 500
+    if (grossValue > 500) {
+      navigate('/home', { state: { message: 'Invoice registered successfully!' } });
+    } else {
+      navigate('/home', { state: { message: 'Assigned to Swastik' } });
+    }
   };
 
   const handleCancel = () => {
-    // Reset the form
+    // Reset the form and navigate back to the home page without a message
     setDocumentType('invoices');
     setInvoiceTemplate('PINV-Purchase invoices');
     setRelatedPurchaseOrder('');
     setInvoiceDate('');
     setSuppliersInvoiceNumber('');
     setInvoiceGrossValue('');
+    navigate('/');
   };
 
   return (
