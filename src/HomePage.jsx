@@ -27,6 +27,12 @@ const HomePage = () => {
       >
         Extract Data from Invoice
       </h1>
+      <h1 
+        className="text-xl font-bold text-blue-500 cursor-pointer hover:underline"
+        onClick={() => navigate('/order-track-lite')}
+      >
+        Order Track Lite
+      </h1>
     </div>
   );
 };
